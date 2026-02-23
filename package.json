@@ -1,23 +1,17 @@
 {
-  "name": "sonicshuffle-vst-backend",
+  "name": "sonic-shuffle-backend",
   "version": "1.0.0",
-  "license": "MIT",
-  "type": "commonjs",
+  "description": "Backend for Sonic Shuffle VST",
+  "main": "index.cjs",
   "scripts": {
-    "start": "node index.cjs",
-    "dev": "node index.cjs",
-    "build": "echo 'No build step required'"
+    "start": "node index.cjs"
   },
   "dependencies": {
-    "axios": "^1.13.5",
-    "cors": "^2.8.6",
-    "dotenv": "^17.3.1",
-    "express": "^5.2.1",
-    "qs": "^6.15.0"
+    "express": "^4.18.2",
+    "axios": "^1.6.2",
+    "cors": "^2.8.5"
   },
-  "devDependencies": {
-    "@types/express": "^5.0.0",
-    "@types/node": "20.19.27",
-    "typescript": "5.6.3"
+  "engines": {
+    "node": "18.x"
   }
 }
