@@ -1,13 +1,7 @@
 const express = require('express');
 const axios   = require('axios');
-const cors    = require('cors'); // Added for VST/Browser security
 const app     = express();
-
-// Railway provides the PORT variable automatically
-const PORT    = process.env.PORT || 8000; 
-
-// Enable CORS so your VST can talk to this server without being blocked
-app.use(cors());
+const PORT    = process.env.PORT || 3000;
 
 const antithesisMap = {
   'house':        'black metal',
@@ -22,16 +16,33 @@ const antithesisMap = {
   'r&b':          'noise rock',
   'drum & bass':  'chamber music',
   'trance':       'delta blues',
+  'house':        'black metal',
+  'deep house':   'thrash metal',
+  'techno':       'bluegrass',
+  'ambient':      'crunk',
+  'shoegaze':     'drill',
+  'indie rock':   'amapiano',
+  'punk':         'bossa nova',
+  'soul':         'noise',
+  'reggae':       'death metal',
+  'blues':        'hyperpop',
+  'country':      'free jazz',
+  'funk':         'black metal',
+  'disco':        'doom metal',
+  'gospel':       'industrial',
+  'k-pop':        'delta blues',
+  'lo-fi':        'thrash metal',
 };
 
 function getAntithesis(genre) {
   const key = genre.toLowerCase().trim();
   if (antithesisMap[key]) return antithesisMap[key];
-  const fallbacks = ['afrobeat', 'cumbia', 'shoegaze', 'ethio-jazz', 'vaporwave', 'flamenco'];
+  const fallbacks = ['afrobeat', 'cumbia', 'shoegaze', 'ethio-jazz', 'vaporwave',
+                     'flamenco', 'bluegrass', 'noise rock', 'dembow', 'psytrance',
+                     'black metal', 'bossa nova', 'drill', 'ambient', 'free jazz'];
   return fallbacks[Math.floor(Math.random() * fallbacks.length)];
 }
 
-// Keep the route as /api/soundcloud to match your JUCE code
 app.get('/api/soundcloud', async (req, res) => {
   const genre = (req.query.genre || '').trim();
   if (!genre) return res.status(400).json({ error: 'genre param required' });
@@ -39,35 +50,32 @@ app.get('/api/soundcloud', async (req, res) => {
   try {
     const antithesisGenre = getAntithesis(genre);
 
-    // Calling Deezer's public API (No Key Required)
+    // Random offset gives different results every call (Deezer indexes 1000+ tracks per query)
+    const randomOffset = Math.floor(Math.random() * 100);
+
     const response = await axios.get('https://api.deezer.com/search', {
       params: {
         q:     antithesisGenre,
         limit: 10,
+        index: randomOffset,
       },
       timeout: 8000,
     });
 
-    // Map the Deezer data to the format your VST expects
-    const results = (response.data.data || []).map(track => ({
+    const results = response.data.data.map(track => ({
       title:    track.title,
       channel:  track.artist.name,
-      trackUrl: track.link, // This is used by your C++ to extract the Track ID
+      trackUrl: track.link,
     }));
 
     res.json({ antithesisGenre, results });
 
   } catch (err) {
     console.error('Deezer error:', err.message);
-    res.status(500).json({ error: 'Failed to fetch from Deezer' });
+    res.status(500).json({ error: err.message });
   }
 });
 
-// Health check route for your "Open Full UI" button
-app.get('/', (req, res) => {
-    res.send('<h1>Sonic Shuffle Backend</h1><p>Status: Online</p>');
-});
+app.get('/', (req, res) => res.send('Sonic Shuffle backend running'));
 
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Sonic Shuffle live at port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
