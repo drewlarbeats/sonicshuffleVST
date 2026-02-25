@@ -149,14 +149,30 @@ app.get('/api/soundcloud', async (req, res) => {
 
   try {
     const antithesisGenre = getAntithesis(genre);
-    const randomOffset    = Math.floor(Math.random() * 200);
+    const randomOffset    = Math.floor(Math.random() * 80); // lower ceiling = fewer empty results
     const modifier        = searchModifiers[Math.floor(Math.random() * searchModifiers.length)];
     const searchQuery     = modifier ? `${antithesisGenre} ${modifier}` : antithesisGenre;
 
-    const response = await axios.get('https://api.deezer.com/search', {
+    let response = await axios.get('https://api.deezer.com/search', {
       params: { q: searchQuery, limit: 10, index: randomOffset },
       timeout: 8000,
     });
+
+    // If offset was too high and returned nothing, retry from 0 with clean query
+    if (!response.data.data || response.data.data.length === 0) {
+      response = await axios.get('https://api.deezer.com/search', {
+        params: { q: antithesisGenre, limit: 10, index: 0 },
+        timeout: 8000,
+      });
+    }
+
+    // If still nothing, fall back to searching the original genre input
+    if (!response.data.data || response.data.data.length === 0) {
+      response = await axios.get('https://api.deezer.com/search', {
+        params: { q: genre, limit: 10, index: 0 },
+        timeout: 8000,
+      });
+    }
 
     const results = (response.data.data || []).map(track => ({
       title:    track.title,
@@ -174,3 +190,4 @@ app.get('/api/soundcloud', async (req, res) => {
 
 app.get('/', (req, res) => res.send('Sonic Shuffle backend running'));
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+
