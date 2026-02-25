@@ -4,7 +4,6 @@ const app     = express();
 const PORT    = process.env.PORT || 3000;
 
 const antithesisMap = {
- module.exports = {
   // Electronic / Dance
   'house':                ['black metal', 'delta blues', 'bluegrass', 'free jazz'],
   'deep house':           ['thrash metal', 'bluegrass', 'free jazz', 'flamenco'],
@@ -13,37 +12,31 @@ const antithesisMap = {
   'minimal techno':       ['death metal', 'gospel', 'cumbia', 'folk'],
   'acid techno':          ['chamber music', 'bossa nova', 'folk', 'blues'],
   'trance':               ['delta blues', 'black metal', 'afrobeat', 'bluegrass'],
-  'progressive trance':   ['sludge metal', 'folk', 'ethio jazz', 'blues'],
+  'progressive trance':   ['sludge metal', 'folk', 'blues', 'jazz'],
   'psytrance':            ['country', 'doom metal', 'free jazz', 'reggae'],
   'drum and bass':        ['chamber music', 'flamenco', 'cool jazz', 'orchestral'],
+  'drum & bass':          ['chamber music', 'flamenco', 'jazz', 'classical'],
   'dubstep':              ['bossa nova', 'soul', 'bluegrass', 'jazz'],
   'grime':                ['classical', 'bossa nova', 'flamenco', 'bluegrass'],
   'uk garage':            ['black metal', 'blues', 'free jazz', 'jazz'],
   'breakbeat':            ['baroque', 'country', 'smooth jazz', 'classical'],
   'electro':              ['country', 'jazz', 'folk', 'blues'],
-  'hardstyle':            ['chamber music', 'cool jazz', 'folk', 'minimalism'],
+  'hardstyle':            ['chamber music', 'cool jazz', 'folk', 'classical'],
   'gabber':               ['ambient', 'dub', 'cool jazz', 'bossa nova'],
-  'breakcore':            ['minimalism', 'cool jazz', 'ambient', 'dub'],
-  'eurodance':            ['delta blues', 'post rock', 'dark ambient', 'folk'],
-
-  // Experimental / Abstract
+  'eurodance':            ['delta blues', 'post rock', 'folk', 'jazz'],
   'idm':                  ['soul', 'bluegrass', 'flamenco', 'cumbia'],
   'ambient':              ['rap', 'thrash metal', 'drill', 'death metal'],
   'dark ambient':         ['pop', 'bossa nova', 'bluegrass', 'cumbia'],
   'drone':                ['dancehall', 'soul', 'bluegrass', 'cumbia'],
   'noise':                ['smooth jazz', 'bossa nova', 'country', 'jazz'],
   'industrial':           ['bossa nova', 'country', 'jazz', 'pop'],
-  'power electronics':    ['bossa nova', 'yacht rock', 'doo-wop', 'ambient'],
-  'glitch':               ['folk', 'chamber music', 'delta blues', 'baroque'],
-
-  // Vapor / Wave
+  'power electronics':    ['bossa nova', 'soul', 'jazz', 'ambient'],
+  'glitch':               ['folk', 'blues', 'delta blues', 'baroque'],
   'synthwave':            ['free jazz', 'blues', 'afrobeat', 'country'],
   'darkwave':             ['dancehall', 'soul', 'cumbia', 'afrobeat'],
   'new wave':             ['death metal', 'country', 'free jazz', 'afrobeat'],
   'vaporwave':            ['thrash metal', 'bluegrass', 'afrobeat', 'blues'],
   'city pop':             ['death metal', 'free jazz', 'doom metal', 'afrobeat'],
-
-  // Hip-Hop / Urban
   'hip hop':              ['baroque', 'bluegrass', 'flamenco', 'bossa nova'],
   'lo-fi hip hop':        ['thrash metal', 'death metal', 'doom metal', 'black metal'],
   'trip hop':             ['thrash metal', 'black metal', 'bluegrass', 'death metal'],
@@ -56,17 +49,13 @@ const antithesisMap = {
   'conscious hip hop':    ['death metal', 'thrash metal', 'black metal', 'doom metal'],
   'g-funk':               ['black metal', 'baroque', 'jazz', 'free jazz'],
   'crunk':                ['baroque', 'jazz', 'bossa nova', 'smooth jazz'],
-  'horrorcore':           ['gospel', 'bossa nova', 'yacht rock', 'city pop'],
-
-  // R&B / Soul / Funk
+  'horrorcore':           ['gospel', 'bossa nova', 'jazz', 'classical'],
   'r&b':                  ['black metal', 'death metal', 'thrash metal', 'doom metal'],
   'neo soul':             ['death metal', 'black metal', 'thrash metal', 'doom metal'],
   'soul':                 ['black metal', 'death metal', 'thrash metal', 'metal'],
   'funk':                 ['black metal', 'death metal', 'doom metal', 'thrash metal'],
   'gospel':               ['industrial', 'black metal', 'death metal', 'metal'],
   'disco':                ['doom metal', 'black metal', 'death metal', 'thrash metal'],
-
-  // Rock / Punk
   'rock':                 ['afrobeat', 'bossa nova', 'smooth jazz', 'cumbia'],
   'indie rock':           ['afrobeats', 'bossa nova', 'cumbia', 'dancehall'],
   'alternative rock':     ['afrobeats', 'bossa nova', 'cumbia', 'reggae'],
@@ -76,39 +65,29 @@ const antithesisMap = {
   'garage rock':          ['bossa nova', 'smooth jazz', 'afrobeat', 'jazz'],
   'punk':                 ['bossa nova', 'smooth jazz', 'jazz', 'afrobeat'],
   'post punk':            ['bossa nova', 'smooth jazz', 'soul', 'dancehall'],
-  'hardcore punk':        ['bossa nova', 'smooth jazz', 'jazz', 'afrobeat'],
+  'hardcore':             ['bossa nova', 'smooth jazz', 'jazz', 'afrobeat'],
   'pop punk':             ['afrobeats', 'dancehall', 'bossa nova', 'cumbia'],
   'emo':                  ['dancehall', 'afrobeats', 'cumbia', 'reggaeton'],
   'math rock':            ['drone', 'vaporwave', 'punk', 'disco'],
-  'skate punk':           ['baroque', 'chamber music', 'dark ambient', 'cool jazz'],
-
-  // Metal
   'metal':                ['bossa nova', 'smooth jazz', 'soul', 'jazz'],
   'death metal':          ['bossa nova', 'smooth jazz', 'jazz', 'soul'],
   'black metal':          ['house', 'bossa nova', 'smooth jazz', 'soul'],
   'doom metal':           ['dancehall', 'bossa nova', 'smooth jazz', 'soul'],
   'thrash metal':         ['bossa nova', 'smooth jazz', 'soul', 'jazz'],
   'metalcore':            ['bossa nova', 'smooth jazz', 'soul', 'dancehall'],
-  'grindcore':            ['ambient', 'smooth jazz', 'new age', 'classical'],
-  'sludge metal':         ['hyperpop', 'eurodance', 'j-pop', 'synth pop'],
-  'crust punk':           ['city pop', 'baroque', 'smooth jazz', 'k-pop'],
-
-  // Jazz
+  'grindcore':            ['ambient', 'smooth jazz', 'classical', 'jazz'],
+  'sludge metal':         ['pop', 'dancehall', 'j-pop', 'synth pop'],
   'jazz':                 ['death metal', 'black metal', 'thrash metal', 'doom metal'],
   'bebop':                ['death metal', 'thrash metal', 'black metal', 'doom metal'],
   'cool jazz':            ['death metal', 'thrash metal', 'doom metal', 'rap'],
   'free jazz':            ['pop', 'smooth jazz', 'soul', 'dancehall'],
   'smooth jazz':          ['death metal', 'black metal', 'doom metal', 'thrash metal'],
   'afrobeat':             ['black metal', 'doom metal', 'death metal', 'thrash metal'],
-
-  // Classical / Formal
   'classical':            ['drill', 'rap', 'trap', 'phonk'],
   'baroque':              ['trap', 'drill', 'rap', 'phonk'],
   'orchestral':           ['drill', 'trap', 'rap', 'phonk'],
   'opera':                ['rap', 'trap', 'drill', 'metal'],
-  'chamber music':        ['grindcore', 'acid techno', 'dubstep', 'hardcore punk'],
-
-  // Folk / Global / World
+  'chamber music':        ['dubstep', 'acid techno', 'hardcore', 'grime'],
   'folk':                 ['death metal', 'black metal', 'industrial', 'metal'],
   'indie folk':           ['death metal', 'black metal', 'metal', 'industrial'],
   'bossa nova':           ['black metal', 'death metal', 'thrash metal', 'metal'],
@@ -119,25 +98,21 @@ const antithesisMap = {
   'dancehall':            ['black metal', 'death metal', 'doom metal', 'thrash metal'],
   'reggae':               ['death metal', 'black metal', 'thrash metal', 'doom metal'],
   'highlife':             ['black metal', 'doom metal', 'shoegaze', 'industrial'],
-  'tango':                ['drum and bass', 'breakcore', 'acid techno', 'noise'],
-
-  // Roots / Traditional
+  'tango':                ['drum and bass', 'acid techno', 'noise', 'industrial'],
   'blues':                ['pop', 'rap', 'phonk', 'trap'],
   'delta blues':          ['pop', 'rap', 'phonk', 'trap'],
   'country':              ['free jazz', 'afrobeat', 'death metal', 'phonk'],
   'bluegrass':            ['techno', 'death metal', 'afrobeats', 'trap'],
-
-  // Pop
   'pop':                  ['free jazz', 'black metal', 'death metal', 'doom metal'],
   'synth pop':            ['death metal', 'free jazz', 'doom metal', 'afrobeat'],
   'hyperpop':             ['blues', 'country', 'free jazz', 'bluegrass'],
   'k-pop':                ['death metal', 'free jazz', 'doom metal', 'afrobeat'],
   'j-pop':                ['death metal', 'free jazz', 'doom metal', 'afrobeat'],
   'bubblegum pop':        ['black metal', 'noise', 'doom metal', 'industrial'],
-  'yacht rock':           ['crust punk', 'death metal', 'grime', 'industrial'],
-  'boy band':             ['power electronics', 'sludge metal', 'free jazz', 'noise'],
-  'new age':              ['grindcore', 'drill', 'industrial', 'death metal']
+  'yacht rock':           ['death metal', 'grime', 'industrial', 'punk'],
+  'new age':              ['grindcore', 'drill', 'industrial', 'death metal'],
 };
+
 const searchModifiers = [
   '', '', '', '', '',
   'underground', 'experimental', 'classic', 'essential',
@@ -199,5 +174,3 @@ app.get('/api/soundcloud', async (req, res) => {
 
 app.get('/', (req, res) => res.send('Sonic Shuffle backend running'));
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
-
-
